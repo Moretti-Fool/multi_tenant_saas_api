@@ -1,0 +1,45 @@
+services:
+    api:
+        build: .
+        depends_on:
+            - postgres
+        ports:
+            - 80:8000
+            
+        entrypoint: ["sh", "/usr/src/app/entrypoint.sh"]
+        # env_file:
+        #     - ./env
+        environment:
+            - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+            - DATABASE_PORT=${DATABASE_PORT}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - DATABASE_NAME=${DATABASE_NAME}
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - SECRET_KEY=${SECRET_KEY}
+            - ALGORITHM=${ALGORITHM}
+            - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+            - POOL_SIZE=${POOL_SIZE}
+            - MAX_OVERFLOW=${MAX_OVERFLOW}
+            - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+            - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+            - GOOGLE_REDIRECT_URI=${GOOGLE_REDIRECT_URI}
+            - SECRET_KEY_GOOGLE_AUTH=${SECRET_KEY_GOOGLE_AUTH}
+            - SMTP_SERVER=${SMTP_SERVER}
+            - SMTP_PORT=${SMTP_PORT}
+            - SMTP_EMAIL=${SMTP_EMAIL}
+            - SMTP_PASSWORD=${SMTP_PASSWORD}
+            - VERIFICATION_TOKEN_EXPIRE=${VERIFICATION_TOKEN_EXPIRE}
+    postgres:
+        image: postgres
+        environment:
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+            - POSTGRES_DB=${DATABASE_NAME}
+
+        volumes: 
+            - postgres-db:/var/lib/postgresql/data
+            
+volumes:
+    postgres-db:
+
+        
+

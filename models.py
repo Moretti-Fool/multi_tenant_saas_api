@@ -64,3 +64,14 @@ class User(Base):
     role = relationship("Role", back_populates="users")
     tenant = relationship("Tenant", back_populates="users")
 
+class Admin(Base):
+    __tablename__ = "admins"
+    __table_args__ = {'schema': 'public'}
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String, nullable=False)
+    is_superadmin = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
+    last_login = Column(DateTime, nullable=True)

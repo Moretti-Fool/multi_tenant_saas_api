@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Cookie, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_default_db
@@ -23,3 +22,7 @@ def admin_dashboard(
         ))
     db.commit()  
     return {"message": f"Welcome Admin {current_user.email}!"}
+
+@router.get("/auditlog")
+def get_audit_log(current_user: User = Depends(get_current_admin_user), db: Session = Depends(get_default_db)):
+    aduitlog= db.query(AuditLog).all()
