@@ -1,10 +1,10 @@
 # Multi-Tenant SaaS Platform
-
-A scalable multi-tenant SaaS application built with FastAPI and PostgreSQL schema-based isolation, featuring secure authentication, tenant management, and admin controls.
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115.11-green)](https://fastapi.tiangolo.com)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-blue)](https://www.postgresql.org)
 [![Docker](https://img.shields.io/badge/Docker-20.10%2B-blue)](https://www.docker.com)
+A scalable multi-tenant SaaS application built with FastAPI and PostgreSQL schema-based isolation, featuring secure authentication, tenant management, and admin controls.
+
 ## Features
 
 - **Multi-Tenant Architecture**: Schema isolation per tenant using PostgreSQL
@@ -60,7 +60,7 @@ pip install -r requirements.txt
 ### **4️⃣ Setup Environment Variables**
 Rename `.env.example` to `.env` and update the database credentials.
 
-### **5 Start the Application**
+### 5️⃣ Create Admin User**
 ```bash
 python admin_create.py create-admin
 ```
