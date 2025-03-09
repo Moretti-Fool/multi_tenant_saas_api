@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import get_tenant_db, get_default_db
-from models import Tenant, User
-from utils.auth import create_access_token, verify_password
+from models import AuditLog, Tenant, User
+from utils.auth import create_access_token, verify_password, get_current_tenant_user
 
 
 router = APIRouter(
@@ -39,7 +39,12 @@ def login(
     # Ensure the user has a verified account if required
     if not valid_entry.is_verified:
         raise HTTPException(status_code=400, detail="Not registered or verified")
-
+    db.add(AuditLog(
+            event="USER_LOGIN",
+            tenant_id=valid_entry.tenant_id,
+            details=f"User {valid_entry.email} Logged In"
+        ))
+    db.commit()
     # Generate Access Token
     access_token = create_access_token(data={"user_id": valid_entry.id})
 
@@ -50,7 +55,15 @@ def login(
     return {"message": "Login successful", "access_token": access_token}
 
 @router.post("/logout")
-def logout(response: Response):
+def logout(response: Response, current_user: User = Depends(get_current_tenant_user), db: Session = Depends(get_default_db)):
     response.delete_cookie("access_token")
     response.delete_cookie("tenant_name")
+
+    db.add(AuditLog(
+        event="USER_LOGOUT",
+        tenant_id=current_user.tenant_id,
+        details=f"User {current_user.email} Logged Out"
+        ))
+    db.commit()
+
     return {"message": "Logged out successfully"}
