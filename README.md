@@ -1,8 +1,10 @@
 # Multi-Tenant SaaS Platform
+
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115.11-green)](https://fastapi.tiangolo.com)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-blue)](https://www.postgresql.org)
 [![Docker](https://img.shields.io/badge/Docker-20.10%2B-blue)](https://www.docker.com)
+
 A scalable multi-tenant SaaS application built with FastAPI and PostgreSQL schema-based isolation, featuring secure authentication, tenant management, and admin controls.
 
 ## Features
