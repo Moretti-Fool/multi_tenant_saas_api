@@ -1,8 +1,8 @@
 """Tenant Schema Creation
 
-Revision ID: 0a31643745ff
+Revision ID: 69d73a455a8d
 Revises: 
-Create Date: 2025-03-06 14:00:03.805722
+Create Date: 2025-03-09 16:37:10.768473
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0a31643745ff'
+revision: str = '69d73a455a8d'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None

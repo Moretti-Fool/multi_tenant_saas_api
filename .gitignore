@@ -4,5 +4,3 @@ venv
 main_Ex.py
 notes.txt
 docker-compose-dev.yml
-utils/admin_utils.py
-utils/admin_create.py
