@@ -24,7 +24,7 @@ A scalable Multi-Tenant SaaS application built with FastAPI and PostgreSQL schem
   - Admin dashboard
 - **Email Verification**: Secure token-based verification flow
 - **Containerization**: Docker + Docker Compose for development/production
-- **CI/CD Ready**: Alembic migrations integrated
+- **Alembic Migrations**: For database versioning
 
 ## Tech Stack
 
