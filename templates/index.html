@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Tenant SaaS API Documentation</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Multi-Tenant SaaS Platform API Documentation</h1>
+        <h3><strong>Built with FastAPI, PostgreSQL, and Docker</strong></h3>
+    </header>
+    <div class="container">
+        <!-- Left Section: API Details -->
+        <section class="api-details">
+            <h2>Core Features</h2>
+            <ul>
+                <li>Schema-based multi-tenancy with PostgreSQL isolation</li>
+                <li>JWT Authentication with Google OAuth2 integration</li>
+                <li>Role-based access control (Admin/User)</li>
+                <li>Audit logging system</li>
+                <li>Email verification workflow</li>
+            </ul>
+
+            <h2>Tenant Management</h2>
+            <ul>
+                <li><strong>Create Tenant:</strong> Register new organization with automatic schema provisioning</li>
+                <li><strong>Get Tenants:</strong> List all tenants (Admin only)</li>
+            </ul>
+
+            <h2>User Management</h2>
+            <ul>
+                <li><strong>Register User:</strong> Create account with email verification</li>
+                <li><strong>Login:</strong> JWT token generation with OAuth2 password flow</li>
+                <li><strong>Google Login:</strong> OAuth2 integration with Google</li>
+                <li><strong>Role Management:</strong> Assign admin privileges (Superadmin only)</li>
+            </ul>
+
+            <h2>Admin Features</h2>
+            <ul>
+                <li><strong>Audit Logs:</strong> Retrieve system-wide activity records</li>
+                <li><strong>User Management:</strong> List/disable users across tenants</li>
+            </ul>
+        </section>
+
+        <!-- Right Section: Documentation Links -->
+        <section class="docs-options">
+            <h2>Interactive Documentation</h2>
+            <div class="doc-buttons">
+                <a href="/doc" class="btn">Swagger UI</a>
+                <a href="/redoc" class="btn">ReDoc</a>
+            </div>
+            <div class="repo-link">
+                <p>View source code:</p>
+                <a href="https://github.com/Moretti-Fool/multi_tenant_saas_api" class="btn github-btn">
+                    <img src="/static/github-icon.png" alt="GitHub Logo">
+                    GitHub Repository
+                </a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

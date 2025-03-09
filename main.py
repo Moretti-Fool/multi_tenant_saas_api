@@ -1,15 +1,20 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.staticfiles import StaticFiles
 from config import settings
-from database import engine
-from models import Base
-from models import Tenant, UserVerification, AuditLog
 from routes import registration, login, admin, google
 
 
 
-app = FastAPI()
+app = FastAPI(
+
+    redoc_url="/redoc",
+    docs_url="/doc",
+    openapi_url="/openapi.json"
+)
 
 # Base.metadata.create_all(
 #     bind=engine, 
@@ -46,6 +51,21 @@ app.include_router(google.router)
 
 
 
-@app.get("/")
-def root():
-    return {"Message": "Welcome!"}
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+# Route to serve the index page
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# Route to Swagger UI
+@app.get("/doc")
+async def custom_docs():
+    return RedirectResponse(url="/swagger")
+
+# Route to ReDoc
+@app.get("/redoc")
+async def custom_redoc():
+    return RedirectResponse(url="/redoc")

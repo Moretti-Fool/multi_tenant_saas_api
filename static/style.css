@@ -1,0 +1,82 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Font Styling */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #101010bf;
+    color: #fefefe;
+    padding: 20px;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* API Details Section */
+.api-details {
+    flex: 2;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: rgb(31, 32, 32);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Links Section */
+.docs-options {
+    flex: 1;
+    padding: 20px;
+    background-color: #101010bf;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.docs-options ul {
+    list-style: none;
+    padding: 0;
+}
+
+.docs-options .btn {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.docs-options .btn:hover {
+    background-color: #060d11;
+}
+
+/* Heading and List Styling */
+h1 {
+    text-align: center;
+}
+h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+h1, h2 {
+    color: #fafafa;
+    margin-bottom: 10px;
+}
+
+ul {
+    margin-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
