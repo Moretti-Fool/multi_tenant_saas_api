@@ -44,7 +44,7 @@ A scalable Multi-Tenant SaaS application built with FastAPI and PostgreSQL schem
 ## 🛠️ Installation
 ### **1️⃣ Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/multi-tenant-saas.git
+git clone https://github.com/Moretti-Fool/multi_tenant_saas_api.git
 cd multi-tenant-saas
 ```
 
