@@ -69,6 +69,11 @@ python admin_create.py create-admin
 
 ### **6️⃣ Start the Application**
 ```bash
-docker-compose -f docker-compose-prod.yml up -d
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+## 🐳 Docker Setup
+```bash
+docker-compose -f docker-compose-prod.yml up --build -d
 ```
 
