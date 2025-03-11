@@ -70,7 +70,7 @@ python admin_create.py create-admin
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-##🐳 Docker Setup
+## 🐳 Docker Setup
 
 ### To run the application using Docker:
 ```bash
