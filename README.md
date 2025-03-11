@@ -35,7 +35,7 @@ A secure, scalable multi-tenant application with schema-based isolation, featuri
 
 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/yourusername/multi-tenant-saas.git
+git clone https://github.com/Moretti-Fool/multi_tenant_saas_api.git
 cd multi-tenant-saas
 ```
 
