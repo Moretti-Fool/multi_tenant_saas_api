@@ -61,6 +61,11 @@ async def callback(request: Request, db: Session = Depends(get_default_db)):
     except OAuthError as e:
         raise HTTPException(status_code=401, detail=f"OAuth error: {str(e)}")
 
+    # Search fo tenant, if not create tenant
+    tenant = db.query(Tenant).filter(Tenant.name == tenant_name).first()
+    if not tenant:
+        tenant = create_tenant(tenant_name, db)
+
     # Get tenant database connection
     tenant_db = next(get_tenant_db(tenant.schema_name))
     tenant = db.query(Tenant).filter(Tenant.name == tenant_name).first()
