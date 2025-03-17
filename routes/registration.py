@@ -44,6 +44,9 @@ async def register_user(
 
     # Tenant database connection
     tenant_db = next(get_tenant_db(tenant.schema_name))
+    user_query = db.query(User).filter(User.email == user.email).first()
+    if(user_query):
+        raise HTTPException(status_code=400, detail=f"Email {user.email} already exists")
     try:
         # User creation
         default_role = tenant_db.query(Role).filter(Role.name == "USER").first()
