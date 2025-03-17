@@ -90,7 +90,7 @@ async def register_user(
         tenant_db.close()
 
     # Send verification email
-    verification_link = f"http://127.0.0.1:8000/register/verify-email?token={raw_token}"
+    verification_link = f"{BASE_URL}/register/verify-email?token={raw_token}"
     email_body = f"""
     <html>
         <body>
