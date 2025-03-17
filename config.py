@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings): # CASE INSENSITIVE BUT BEST PRACTICE IS TO SET THEM CAPITALIZE
+    BASE_URL: str
     DATABASE_HOSTNAME: str
     DATABASE_PORT: str
     DATABASE_PASSWORD: str
