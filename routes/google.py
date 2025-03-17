@@ -41,9 +41,11 @@ async def login(request: Request, tenant_name: str, action: str = "login"):
 
 @router.get("/callback")
 async def callback(request: Request, db: Session = Depends(get_default_db)):
-
+    valid_entry = None  
+    tenant_db = None
+    
     try:
-        # Retrieve OAuth token and validate state
+        # Retrieve OAuth token and validate
         token = await oauth.google.authorize_access_token(request)
         user_info = token.get("userinfo")
         email = user_info.get("email")
@@ -51,32 +53,27 @@ async def callback(request: Request, db: Session = Depends(get_default_db)):
         if not email:
             raise HTTPException(status_code=422, detail="Missing email in Google response")
             
-        # Retrieve stored session data
+        # Retrieve session context
         tenant_name = request.session.get("tenant_name")
         action = request.session.get("action")
         
         if not tenant_name or not action:
             raise HTTPException(status_code=400, detail="Missing session context")
 
-    except OAuthError as e:
-        raise HTTPException(status_code=401, detail=f"OAuth error: {str(e)}")
+        # Handle tenant creation/retrieval
+        tenant = db.query(Tenant).filter(Tenant.name == tenant_name).first()
+        if not tenant:
+            tenant = create_tenant(tenant_name, db)
 
-    # Search fo tenant, if not create tenant
-    tenant = db.query(Tenant).filter(Tenant.name == tenant_name).first()
-    if not tenant:
-        tenant = create_tenant(tenant_name, db)
-
-    # Get tenant database connection
-    tenant_db = next(get_tenant_db(tenant.schema_name))
-    tenant = db.query(Tenant).filter(Tenant.name == tenant_name).first()
-    if not tenant:
-        tenant = create_tenant(tenant_name, db)
-    try:
+        # Get tenant-specific database connection
+        tenant_db = next(get_tenant_db(tenant.schema_name))
+        
+        # Verify default role exists
         default_role = tenant_db.query(Role).filter(Role.name == "USER").first()
         if not default_role:
-            raise HTTPException(500, "Default role not found")
+            raise HTTPException(status_code=500, detail="Default USER role not configured")
 
-    # Handle registration flow
+        # Handle registration flow
         if action == "register":
             existing_user = tenant_db.query(User).filter(User.email == email).first()
             if existing_user:
@@ -91,23 +88,20 @@ async def callback(request: Request, db: Session = Depends(get_default_db)):
                 hashed_password=generate_placeholder_password(),
                 role_id=default_role.id,
                 tenant_id=tenant.id,
-                verification_token=None,
-                token_expires_at=None,
                 is_verified=True
             )
-
             tenant_db.add(new_user)
             tenant_db.commit()
             valid_entry = new_user
 
-            # Add audit log
+            # Audit log in default DB
             db.add(AuditLog(
                 event="USER_SIGN_UP",
                 tenant_id=tenant.id,
                 details=f"User {email} registered via Google"
             ))
 
-    # Handle login flow
+        # Handle login flow
         elif action == "login":
             valid_entry = tenant_db.query(User).filter(User.email == email).first()
             if not valid_entry:
@@ -123,31 +117,40 @@ async def callback(request: Request, db: Session = Depends(get_default_db)):
             details=f"User {email} logged in via Google"
         ))
         db.commit()
-    except:
-        tenant_db.rollback()
+
+        # Generate tokens INSIDE try block after validation
+        access_token = create_access_token(data={"user_id": valid_entry.id})
+        response = JSONResponse(content={"message": "Authentication successful"})
+        
+        # Set cookies
+        response.set_cookie(
+            key="access_token",
+            value=access_token,
+            httponly=True,
+            secure=True,
+            samesite="Strict"
+        )
+        response.set_cookie(
+            key="tenant_name",
+            value=tenant.name,
+            httponly=False,
+            secure=True,
+            samesite="Strict"
+        )
+
+        return response
+
+    except HTTPException as he:
+        if tenant_db: tenant_db.rollback()
         db.rollback()
-    # Generate tokens
-    access_token = create_access_token(data={"user_id": valid_entry.id})
-    response = JSONResponse(content={"message": "Authentication successful"})
-    
-    # Set cookies
-    response.set_cookie(
-        key="access_token",
-        value=access_token,
-        httponly=True,
-        secure=True,
-        samesite="Strict"
-    )
-    response.set_cookie(
-        key="tenant_name",
-        value=tenant.name,
-        httponly=False,
-        secure=True,
-        samesite="Strict"
-    )
-
-    return response
-
+        raise he
+    except Exception as e:
+        if tenant_db: tenant_db.rollback()
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Authentication failed: {str(e)}"
+        )
 @router.post("/logout")
 def logout(
     response: Response,
