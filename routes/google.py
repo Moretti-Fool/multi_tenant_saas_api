@@ -67,6 +67,9 @@ async def callback(request: Request, db: Session = Depends(get_default_db)):
         tenant = create_tenant(tenant_name, db)
         
     tenant_db = next(get_tenant_db(tenant.schema_name))
+    user_query = tenant_db.query(User).filter(User.email == email).first()
+    if(user_query):
+        raise HTTPException(status_code=400, detail=f"Email {email} already exists")
     try:
         default_role = tenant_db.query(Role).filter(Role.name == "USER").first()
         if not default_role:
